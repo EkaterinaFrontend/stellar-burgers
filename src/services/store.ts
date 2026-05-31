@@ -1,15 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import {
   TypedUseSelectorHook,
   useDispatch as dispatchHook,
   useSelector as selectorHook
 } from 'react-redux';
-
-const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
+// ИСПРАВЛЕНО: Импортируем настоящий корневой редьюсер
+import { rootReducer } from './rootReducer';
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: rootReducer, // ИСПРАВЛЕНО: Теперь здесь настоящий редьюсер приложения
   devTools: process.env.NODE_ENV !== 'production'
 });
 

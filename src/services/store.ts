@@ -4,11 +4,11 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook
 } from 'react-redux';
-// ИСПРАВЛЕНО: Импортируем настоящий корневой редьюсер
+
 import { rootReducer } from './rootReducer';
 
 const store = configureStore({
-  reducer: rootReducer, // ИСПРАВЛЕНО: Теперь здесь настоящий редьюсер приложения
+  reducer: rootReducer, 
   devTools: process.env.NODE_ENV !== 'production'
 });
 

@@ -17,9 +17,7 @@ const initialState: OrdersState = {
 // Асинхронный экшен для получения заказов конкретного пользователя
 export const fetchUserOrders = createAsyncThunk(
   'orders/fetchUserOrders',
-  async () => {
-    return await getOrdersApi();
-  }
+  async () => await getOrdersApi()
 );
 
 const orderSlice = createSlice({

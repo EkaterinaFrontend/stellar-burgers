@@ -12,11 +12,11 @@ export const Register: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if(email && userName && password) {
+    if (email && userName && password) {
       dispatch(
         registerUser({
           email,
-          name:userName,
+          name: userName,
           password
         })
       );

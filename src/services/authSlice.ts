@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { 
-  loginUserApi, 
-  registerUserApi, 
-  logoutApi, 
-  getUserApi, 
-  updateUserApi 
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {
+  loginUserApi,
+  registerUserApi,
+  logoutApi,
+  getUserApi,
+  updateUserApi
 } from '../utils/burger-api';
 
 export interface TUser {
@@ -23,7 +23,7 @@ const initialState: AuthState = {
   user: null,
   isAuthChecked: false,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 // Асинхронные экшены
@@ -35,20 +35,14 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
-  'auth/login',
-  async (data: any) => {
-    const res = await loginUserApi(data);
-    return res.user;
-  }
-);
+export const loginUser = createAsyncThunk('auth/login', async (data: any) => {
+  const res = await loginUserApi(data);
+  return res.user;
+});
 
-export const logoutUser = createAsyncThunk(
-  'auth/logout',
-  async () => {
-    await logoutApi();
-  }
-);
+export const logoutUser = createAsyncThunk('auth/logout', async () => {
+  await logoutApi();
+});
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
@@ -107,27 +101,30 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка авторизации';
       })
-      
+
       // Регистрация
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action: PayloadAction<TUser>) => {
-        state.isLoading = false;
-        state.user = action.payload;
-        state.isAuthChecked = true;
-      })
+      .addCase(
+        registerUser.fulfilled,
+        (state, action: PayloadAction<TUser>) => {
+          state.isLoading = false;
+          state.user = action.payload;
+          state.isAuthChecked = true;
+        }
+      )
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-      
+
       // Выход из системы
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
       })
-      
+
       // Обновление данных пользователя
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;

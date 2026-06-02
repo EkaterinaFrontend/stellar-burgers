@@ -1,11 +1,10 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getAuthState, updateUser } from 'src/services/authSlice';
-
+import { getAuthState, updateUser } from '../../services/authSlice';
 export const Profile: FC = () => {
   const dispatch = useDispatch();
-  
+
   // Получаем актуального пользователя из Redux
   const { user } = useSelector(getAuthState);
 
@@ -27,7 +26,6 @@ export const Profile: FC = () => {
     }
   }, [user]);
 
- 
   const isFormChanged =
     formValue.name !== (user?.name || '') ||
     formValue.email !== (user?.email || '') ||

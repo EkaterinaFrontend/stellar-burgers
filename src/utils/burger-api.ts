@@ -239,7 +239,7 @@ export const updateUserApi = (user: Partial<TRegisterData>) =>
       authorization: getCookie('accessToken')
     } as HeadersInit,
     body: JSON.stringify(user)
-  })
+  });
 
 export const logoutApi = () =>
   fetch(`${URL}/auth/logout`, {

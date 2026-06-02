@@ -1,8 +1,7 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { registerUser, getAuthState, loginUser } from 'src/services/authSlice';
-
+import { getAuthState, loginUser } from '../../services/authSlice';
 export const Login: FC = () => {
   const dispatch = useDispatch();
   const { error } = useSelector(getAuthState);
@@ -12,12 +11,12 @@ export const Login: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-     if(email && password) {
+    if (email && password) {
       dispatch(
-          loginUser({
+        loginUser({
           email,
           password
-          })
+        })
       );
     }
   };

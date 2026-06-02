@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from '../../services/store';
 import { fetchFeed, getFeedsState } from '../../services/feedSlice';
 
 export const Feed: FC = () => {
-<<<<<<< HEAD
   const dispatch = useDispatch();
   
 
@@ -28,23 +27,4 @@ export const Feed: FC = () => {
 
   // Рендерим UI интерфейс ленты заказов, когда данные успешно получены
   return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
-=======
-  /** TODO: взять переменную из стора */
-  const dispatch = useDispatch();
-const { orders, isLoading } = useSelector(getFeedsState);
-
-const handleGetFeeds = () => {
-  dispatch(fetchFeed());
 };
-
-useEffect(() => {
-  dispatch(fetchFeed());
-}, [dispatch]);
-
-  if (isLoading || !orders.length) {
-    return <Preloader />;
-  }
- return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds}/>;
->>>>>>> d416f996dd82186e20c96ebb6dfe8606c6e46d95
-};
-//

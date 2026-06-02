@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import styles from './app.module.css';
 import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 
-// Импорт компонентов и страниц по вашим алиасам @
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
 import { 
@@ -47,10 +46,8 @@ const App = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // ИСПРАВЛЕНО: Убрали дублирующие переменные-заглушки, берем всё из стора
   const { ingredients, isLoading: isIngredientsLoading, error } = useSelector(getIngredientsState);
 
-  // ИСПРАВЛЕНО: Заменили на корректное имя свойства backgroundLocation, как в вашем стейте
   const background = location.state && location.state.backgroundLocation;
 
   useEffect(() => {
@@ -66,10 +63,7 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
       
-      {/* 
-        ИСПРАВЛЕНО: Убрали лишние внешние проверки условий, 
-        теперь вся логика загрузки ингредиентов находится строго внутри рендера маршрута '/'
-      */}
+    
       <Routes location={background || location}>
         <Route 
           path='/' 

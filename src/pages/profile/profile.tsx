@@ -27,9 +27,7 @@ export const Profile: FC = () => {
     }
   }, [user]);
 
-  // ИСПРАВЛЕНО: Вычисляем, изменились ли поля формы по сравнению со стором.
-  // Кнопки «Сохранить» и «Отмена» появятся, если имя или email не совпадают с исходными, 
-  // либо если пользователь начал вводить новый пароль.
+ 
   const isFormChanged =
     formValue.name !== (user?.name || '') ||
     formValue.email !== (user?.email || '') ||
@@ -49,7 +47,6 @@ export const Profile: FC = () => {
     }
   };
 
-  // ИСПРАВЛЕНО: Клик по кнопке «Отмена» возвращает поля в исходное состояние
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
     if (user) {

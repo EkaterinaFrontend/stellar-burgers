@@ -7,7 +7,6 @@ import { Preloader } from '@ui';
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
   
-  // ИСПРАВЛЕНО: Убрали дублирующую переменную-заглушку, берем данные напрямую из стора
   const { orders, isLoading } = useSelector(getOrdersState);
 
   // Запрашиваем историю заказов пользователя при монтировании компонента

@@ -7,7 +7,7 @@ import { fetchFeed, getFeedsState } from '../../services/feedSlice';
 export const Feed: FC = () => {
   const dispatch = useDispatch();
   
-  // Берем актуальные данные о ленте заказов из Redux-стора
+
   const { orders, isLoading } = useSelector((state) => state.feed);
 
   // Функция для ручного или повторного обновления ленты

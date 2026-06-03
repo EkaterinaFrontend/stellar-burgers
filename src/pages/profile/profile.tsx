@@ -1,7 +1,7 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getAuthState, updateUser } from '../../services/authSlice';
+import { getAuthState, updateUser, logoutUser } from '../../services/authSlice';
 export const Profile: FC = () => {
   const dispatch = useDispatch();
 
@@ -55,6 +55,11 @@ export const Profile: FC = () => {
       });
     }
   };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
 
   // Обработчик ввода в инпуты
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

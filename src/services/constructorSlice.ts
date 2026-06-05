@@ -70,3 +70,4 @@ export const getConstructorState = (state: {
 }) => state.burgerConstructor;
 
 export default constructorSlice.reducer;
+// Финальная проверка кода

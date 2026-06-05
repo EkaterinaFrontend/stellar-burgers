@@ -37,7 +37,6 @@ const constructorSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
-    // 👇 ДОБАВИЛИ РЕДЮСЕР ДЛЯ ИЗМЕНЕНИЯ ПОРЯДКА НАЧИНОК СТРЕЛОЧКАМИ
     moveIngredient: (
       state,
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
@@ -47,7 +46,7 @@ const constructorSlice = createSlice({
 
       // Вырезаем элемент с текущей позиции
       state.ingredients.splice(fromIndex, 1);
-      // Вставляем его на новую позицию
+      
       state.ingredients.splice(toIndex, 0, movingIngredient);
     },
     clearConstructor: (state) => {
@@ -57,7 +56,6 @@ const constructorSlice = createSlice({
   }
 });
 
-// 👇 ДОБАВИЛИ moveIngredient В СПИСОК ЭКСПОРТИРУЕМЫХ ЭКШЕНОВ
 export const {
   addIngredient,
   removeIngredient,

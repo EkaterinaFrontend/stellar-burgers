@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getConstructorState,
   clearConstructor
-} from '../../services/constructorSlice'; // оставили только то, что было
+} from '../../services/constructorSlice';
 import { getAuthState } from '../../services/authSlice';
 import {
   orderBurger,

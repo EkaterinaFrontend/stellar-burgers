@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getConstructorState,
   clearConstructor
-} from '../../services/constructorSlice';
+} from '../../services/constructorSlice'; // оставили только то, что было
 import { getAuthState } from '../../services/authSlice';
 import {
   orderBurger,
@@ -17,15 +17,11 @@ import {
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { bun, ingredients } = useSelector(getConstructorState);
   const { user } = useSelector(getAuthState);
   const { order, orderRequest } = useSelector(getNewOrderState);
 
-  const constructorItems = {
-    bun: bun,
-    ingredients: ingredients
-  };
+  const constructorItems = { bun: bun, ingredients: ingredients };
 
   const price = useMemo(
     () =>
@@ -42,7 +38,6 @@ export const BurgerConstructor: FC = () => {
       navigate('/login');
       return;
     }
-
     if (!constructorItems.bun || orderRequest) return;
 
     const orderIngredientIds = [
@@ -55,6 +50,7 @@ export const BurgerConstructor: FC = () => {
       dispatch(clearConstructor());
     });
   };
+
   const closeOrderModal = () => {
     dispatch(clearOrderData());
   };

@@ -37,6 +37,19 @@ const constructorSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
+    // 👇 ДОБАВИЛИ РЕДЮСЕР ДЛЯ ИЗМЕНЕНИЯ ПОРЯДКА НАЧИНОК СТРЕЛОЧКАМИ
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>
+    ) => {
+      const { fromIndex, toIndex } = action.payload;
+      const movingIngredient = state.ingredients[fromIndex];
+
+      // Вырезаем элемент с текущей позиции
+      state.ingredients.splice(fromIndex, 1);
+      // Вставляем его на новую позицию
+      state.ingredients.splice(toIndex, 0, movingIngredient);
+    },
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
@@ -44,9 +57,16 @@ const constructorSlice = createSlice({
   }
 });
 
-export const { addIngredient, removeIngredient, clearConstructor } =
-  constructorSlice.actions;
+// 👇 ДОБАВИЛИ moveIngredient В СПИСОК ЭКСПОРТИРУЕМЫХ ЭКШЕНОВ
+export const {
+  addIngredient,
+  removeIngredient,
+  moveIngredient,
+  clearConstructor
+} = constructorSlice.actions;
+
 export const getConstructorState = (state: {
   burgerConstructor: ConstructorState;
 }) => state.burgerConstructor;
+
 export default constructorSlice.reducer;

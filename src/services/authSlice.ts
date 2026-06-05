@@ -4,8 +4,11 @@ import {
   registerUserApi,
   logoutApi,
   getUserApi,
-  updateUserApi
+  updateUserApi,
+  TLoginData,
+  TRegisterData
 } from '../utils/burger-api';
+import { setCookie, deleteCookie } from '../utils/cookie';
 
 export interface TUser {
   email: string;
@@ -29,19 +32,28 @@ const initialState: AuthState = {
 // Асинхронные экшены
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (data: any) => {
+  async (data: TRegisterData) => {
     const res = await registerUserApi(data);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCookie('accessToken', res.accessToken);
     return res.user;
   }
 );
 
-export const loginUser = createAsyncThunk('auth/login', async (data: any) => {
-  const res = await loginUserApi(data);
-  return res.user;
-});
+export const loginUser = createAsyncThunk(
+  'auth/login',
+  async (data: TLoginData) => {
+    const res = await loginUserApi(data);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCookie('accessToken', res.accessToken);
+    return res.user;
+  }
+);
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
   await logoutApi();
+  localStorage.removeItem('refreshToken');
+  deleteCookie('accessToken');
 });
 
 export const updateUser = createAsyncThunk(
@@ -53,16 +65,18 @@ export const updateUser = createAsyncThunk(
 );
 
 export const checkUserAuth = createAsyncThunk(
-  'auth/checkUser',
+  'auth/checkUserAuth',
   async (_, { dispatch }) => {
     // Если в локалсторадже есть токен — пытаемся получить юзера
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem('refreshToken')) {
       try {
         const res = await getUserApi();
         dispatch(setUser(res.user));
       } catch (err) {
-        // Если токен протух или невалиден — очищаем стейт
+        // Если токен невалиден — очищаем стейт
         dispatch(setUser(null));
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
       } finally {
         dispatch(setAuthChecked(true));
       }
@@ -101,7 +115,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка авторизации';
       })
-
       // Регистрация
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
@@ -119,12 +132,10 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-
       // Выход из системы
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
       })
-
       // Обновление данных пользователя
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;

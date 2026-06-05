@@ -17,11 +17,11 @@ export const ForgotPassword: FC = () => {
     forgotPasswordApi({ email })
       .then(() => {
         localStorage.setItem('forgotPasswordVisited', 'true');
-        navigate('/reset-password',);
+        navigate('/reset-password');
       })
-       .catch((err) => {
-          setError(err.message || 'Ошибка при восстановлении пароля');
-        });
+      .catch((err) => {
+        setError(err.message || 'Ошибка при восстановлении пароля');
+      });
   };
 
   return (

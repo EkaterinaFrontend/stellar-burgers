@@ -1,23 +1,24 @@
 import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useSelector } from '../../services/store';
+import { getFeedsState } from '../../services/feedSlice';
+import { getIngredientsState } from '../../services/ingredientsSlice';
+import { getOrdersState } from '../../services/ordersSlice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams<{ number: string }>();
+  const { ingredients } = useSelector(getIngredientsState);
 
-  const ingredients: TIngredient[] = [];
+  const { orders: feedOrders } = useSelector(getFeedsState);
+  const { orders: userOrders } = useSelector(getOrdersState);
 
-  /* Готовим данные для отображения */
+  const orderData =
+    (feedOrders || []).find((item) => item.number === Number(number)) ||
+    (userOrders || []).find((item) => item.number === Number(number));
+
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 
@@ -32,15 +33,11 @@ export const OrderInfo: FC = () => {
         if (!acc[item]) {
           const ingredient = ingredients.find((ing) => ing._id === item);
           if (ingredient) {
-            acc[item] = {
-              ...ingredient,
-              count: 1
-            };
+            acc[item] = { ...ingredient, count: 1 };
           }
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}
@@ -53,7 +50,7 @@ export const OrderInfo: FC = () => {
 
     return {
       ...orderData,
-      ingredientsInfo,
+      ingredientsInfo: Object.values(ingredientsInfo),
       date,
       total
     };
@@ -63,5 +60,5 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo as any} />;
 };

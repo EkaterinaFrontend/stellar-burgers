@@ -20,7 +20,14 @@ const initialState: FeedState = {
 
 export const fetchFeed = createAsyncThunk(
   'feed/fetchFeed',
-  async () => await getFeedsApi()
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getFeedsApi();
+      return res;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при получении ленты');
+    }
+  }
 );
 
 const feedSlice = createSlice({

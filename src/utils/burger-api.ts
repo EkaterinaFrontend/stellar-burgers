@@ -2,7 +2,6 @@ import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
 const URL = process.env.BURGER_API_URL;
-
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 
@@ -242,7 +241,7 @@ export const updateUserApi = (user: Partial<TRegisterData>) =>
   });
 
 export const logoutApi = () =>
-  fetch(`${URL}/auth/logout`, {
+  fetchWithRefresh<TServerResponse<{}>>(`${URL}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8'
@@ -250,4 +249,4 @@ export const logoutApi = () =>
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
     })
-  }).then((res) => checkResponse<TServerResponse<{}>>(res));
+  });

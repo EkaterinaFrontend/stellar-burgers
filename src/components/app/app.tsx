@@ -5,7 +5,8 @@ import {
   Route,
   useLocation,
   useNavigate,
-  Navigate
+  Navigate,
+  useMatch
 } from 'react-router-dom';
 
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
@@ -69,9 +70,14 @@ const App = () => {
 
   const background = location.state && location.state.backgroundLocation;
 
+  const feedMatch = useMatch('/feed/:number');
+  const ProfileOrdersMatch = useMatch('/profile/orders/:number');
+
+  const orderNumber =
+    feedMatch?.params.number || ProfileOrdersMatch?.params.number;
   useEffect(() => {
-    dispatch(fetchIngredients());
     dispatch(checkUserAuth());
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   const handleModalClose = () => {
@@ -170,13 +176,12 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {/* Рендеринг модальных окон при наличии фонового маршрута */}
       {background && (
         <Routes>
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Информация о заказе' onClose={handleModalClose}>
+              <Modal title={`#${orderNumber || ''}`} onClose={handleModalClose}>
                 <OrderInfo />
               </Modal>
             }
@@ -193,7 +198,10 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='Информация о заказе' onClose={handleModalClose}>
+                <Modal
+                  title={`#${orderNumber || ''}`}
+                  onClose={handleModalClose}
+                >
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

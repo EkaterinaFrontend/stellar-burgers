@@ -60,7 +60,6 @@ export const Profile: FC = () => {
     dispatch(logoutUser());
   };
 
-
   // Обработчик ввода в инпуты
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValue((prevState) => ({

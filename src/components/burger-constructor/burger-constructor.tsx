@@ -3,9 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { getConstructorState, clearConstructor } from '../../services/constructorSlice';
+import {
+  getConstructorState,
+  clearConstructor
+} from '../../services/constructorSlice';
 import { getAuthState } from '../../services/authSlice';
-import { orderBurger, getNewOrderState, clearOrderData }  from '../../services/newOrderSlice';
+import {
+  orderBurger,
+  getNewOrderState,
+  clearOrderData
+} from '../../services/newOrderSlice';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
@@ -24,7 +31,8 @@ export const BurgerConstructor: FC = () => {
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price, 0
+        (s: number, v: TConstructorIngredient) => s + v.price,
+        0
       ),
     [constructorItems]
   );
@@ -43,11 +51,11 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-     dispatch(orderBurger(orderIngredientIds)).then(() => {
+    dispatch(orderBurger(orderIngredientIds)).then(() => {
       dispatch(clearConstructor());
     });
   };
-   const closeOrderModal = () => {
+  const closeOrderModal = () => {
     dispatch(clearOrderData());
   };
 

@@ -1,13 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IIngredient } from './ingredientsSlice';
+import { TIngredient, TConstructorIngredient } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface TConstructorIngredient extends IIngredient {
-  id: string; // уникальный id для draggable-элементов
-}
-
 interface ConstructorState {
-  bun: IIngredient | null;
+  bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
 }
 
@@ -28,7 +24,7 @@ const constructorSlice = createSlice({
           state.ingredients.push(action.payload);
         }
       },
-      prepare: (ingredient: IIngredient) => ({
+      prepare: (ingredient: TIngredient) => ({
         payload: { ...ingredient, id: uuidv4() }
       })
     },
@@ -46,7 +42,7 @@ const constructorSlice = createSlice({
 
       // Вырезаем элемент с текущей позиции
       state.ingredients.splice(fromIndex, 1);
-      
+
       state.ingredients.splice(toIndex, 0, movingIngredient);
     },
     clearConstructor: (state) => {

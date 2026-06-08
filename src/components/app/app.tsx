@@ -68,7 +68,7 @@ const App = () => {
     error
   } = useSelector(getIngredientsState);
 
-  const background = location.state && location.state.backgroundLocation;
+  const background = location.state && location.state.background;
 
   const feedMatch = useMatch('/feed/:number');
   const ProfileOrdersMatch = useMatch('/profile/orders/:number');

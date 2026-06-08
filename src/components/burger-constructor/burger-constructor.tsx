@@ -21,16 +21,19 @@ export const BurgerConstructor: FC = () => {
   const { user } = useSelector(getAuthState);
   const { order, orderRequest } = useSelector(getNewOrderState);
 
-  const constructorItems = { bun: bun, ingredients: ingredients };
+  const constructorItems = useMemo(
+    () => ({ bun, ingredients }),
+    [bun, ingredients]
+  );
 
   const price = useMemo(
     () =>
-      (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
-      constructorItems.ingredients.reduce(
+      (bun ? bun.price * 2 : 0) +
+      ingredients.reduce(
         (s: number, v: TConstructorIngredient) => s + v.price,
         0
       ),
-    [constructorItems]
+    [bun, ingredients]
   );
 
   const onOrderClick = () => {
@@ -46,9 +49,14 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    dispatch(orderBurger(orderIngredientIds)).then(() => {
-      dispatch(clearConstructor());
-    });
+    dispatch(orderBurger(orderIngredientIds))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+      })
+      .catch((error) => {
+        console.error('Ошибка при оформлении заказа:', error);
+      });
   };
 
   const closeOrderModal = () => {

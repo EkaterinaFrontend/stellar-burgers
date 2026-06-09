@@ -24,8 +24,10 @@ export const fetchFeed = createAsyncThunk(
     try {
       const res = await getFeedsApi();
       return res;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при получении ленты');
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Ошибка при получении ленты';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -48,10 +50,18 @@ const feedSlice = createSlice({
       })
       .addCase(fetchFeed.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка загрузки ленты заказов';
+        state.error =
+          (action.payload as string) ||
+          action.error.message ||
+          'Ошибка загрузки ленты заказов';
       });
   }
 });
 
+export const getFeedOrders = (state: { feed: FeedState }) => state.feed.orders;
+export const getFeedTotal = (state: { feed: FeedState }) => state.feed.total;
+export const getFeedTotalToday = (state: { feed: FeedState }) =>
+  state.feed.totalToday;
 export const getFeedsState = (state: { feed: FeedState }) => state.feed;
+
 export default feedSlice.reducer;

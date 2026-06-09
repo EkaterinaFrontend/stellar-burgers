@@ -50,7 +50,7 @@ export const OrderInfo: FC = () => {
 
     return {
       ...orderData,
-      ingredientsInfo: Object.values(ingredientsInfo),
+      ingredientsInfo,
       date,
       total
     };
@@ -60,5 +60,5 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo as any} />;
+  return <OrderInfoUI orderInfo={orderInfo} />;
 };

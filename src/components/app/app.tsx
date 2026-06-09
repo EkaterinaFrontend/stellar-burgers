@@ -8,7 +8,6 @@ import {
   Navigate,
   useMatch
 } from 'react-router-dom';
-
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
 import {
@@ -22,7 +21,6 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
-
 import { useDispatch, useSelector } from '../../services/store';
 import {
   fetchIngredients,
@@ -61,20 +59,18 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const {
     ingredients,
     isLoading: isIngredientsLoading,
     error
   } = useSelector(getIngredientsState);
-
   const background = location.state && location.state.background;
 
   const feedMatch = useMatch('/feed/:number');
   const ProfileOrdersMatch = useMatch('/profile/orders/:number');
-
   const orderNumber =
     feedMatch?.params.number || ProfileOrdersMatch?.params.number;
+
   useEffect(() => {
     dispatch(checkUserAuth());
     dispatch(fetchIngredients());
@@ -87,7 +83,6 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-
       <Routes location={background || location}>
         <Route
           path='/'
@@ -113,7 +108,19 @@ const App = () => {
         />
         <Route path='/feed' element={<Feed />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+
+        {/* ИСПРАВЛЕНО: Добавлен контейнер центрирования и заголовок страницы по макету */}
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrapper}>
+              <h1 className='text text_type_main-large mt-10 mb-5'>
+                Детали ингредиента
+              </h1>
+              <IngredientDetails />
+            </div>
+          }
+        />
 
         <Route
           path='/login'
@@ -147,7 +154,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path='/profile'
           element={
@@ -172,7 +178,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 

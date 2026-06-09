@@ -4,10 +4,9 @@ import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { Preloader } from '../ui/preloader';
 import { useSelector } from '../../services/store';
 import { getIngredientsState } from '../../services/ingredientsSlice';
-export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const { id } = useParams<{ id: string }>();
 
+export const IngredientDetails: FC = () => {
+  const { id } = useParams<{ id: string }>();
   const { ingredients, isLoading } = useSelector(getIngredientsState);
 
   const ingredientData = ingredients.find((item) => item._id === id);

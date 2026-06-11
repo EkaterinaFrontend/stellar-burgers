@@ -1,23 +1,44 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient } from '@utils-types';
+import { TIngredient, TOrder } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { getFeedsState } from '../../services/feedSlice';
 import { getIngredientsState } from '../../services/ingredientsSlice';
 import { getOrdersState } from '../../services/ordersSlice';
+import { getOrderByNumberApi } from '@api';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
   const { ingredients } = useSelector(getIngredientsState);
-
   const { orders: feedOrders } = useSelector(getFeedsState);
   const { orders: userOrders } = useSelector(getOrdersState);
 
-  const orderData =
-    (feedOrders || []).find((item) => item.number === Number(number)) ||
-    (userOrders || []).find((item) => item.number === Number(number));
+  const [fetchedOrder, setFetchedOrder] = useState<TOrder | null>(null);
+
+  const orderFromStore = useMemo(
+    () =>
+      (feedOrders || []).find((item) => item.number === Number(number)) ||
+      (userOrders || []).find((item) => item.number === Number(number)),
+    [feedOrders, userOrders, number]
+  );
+
+  useEffect(() => {
+    if (orderFromStore || !number) return;
+
+    getOrderByNumberApi(Number(number))
+      .then((res) => {
+        if (res.orders && res.orders[0]) {
+          setFetchedOrder(res.orders[0]);
+        }
+      })
+      .catch((err) => {
+        console.error('Ошибка при загрузке заказа по номеру:', err);
+      });
+  }, [number, orderFromStore]);
+
+  const orderData = orderFromStore ?? fetchedOrder;
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;

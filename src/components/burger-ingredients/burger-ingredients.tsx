@@ -4,11 +4,37 @@ import { useInView } from 'react-intersection-observer';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
+import { useSelector } from '../../services/store';
+import { getIngredientsState } from '../../services/ingredientsSlice';
+import { getConstructorState } from '../../services/constructorSlice';
+
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+  const { ingredients } = useSelector(getIngredientsState);
+
+  const { bun, ingredients: constructorIngredients } =
+    useSelector(getConstructorState);
+
+  // Функция, которая автоматически добавляет свойство count к каждому ингредиенту
+  const getIngredientsWithCount = (type: string) =>
+    ingredients
+      .filter((item) => item.type === type)
+      .map((ingredient) => {
+        let count = 0;
+        if (ingredient.type === 'bun') {
+          // Если ID булки совпадает с булкой в конструкторе — их всегда 2 (верхняя и нижняя)
+          count = bun?._id === ingredient._id ? 2 : 0;
+        } else {
+          // Считаем, сколько раз эта начинка или соус добавлены в конструктор
+          count = constructorIngredients.filter(
+            (item) => item._id === ingredient._id
+          ).length;
+        }
+        return { ...ingredient, count };
+      });
+
+  const buns = getIngredientsWithCount('bun');
+  const sauces = getIngredientsWithCount('sauce');
+  const mains = getIngredientsWithCount('main');
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -46,8 +72,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  return null;
 
   return (
     <BurgerIngredientsUI

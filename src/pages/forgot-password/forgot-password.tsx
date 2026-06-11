@@ -16,10 +16,12 @@ export const ForgotPassword: FC = () => {
     setError(null);
     forgotPasswordApi({ email })
       .then(() => {
-        localStorage.setItem('resetPassword', 'true');
-        navigate('/reset-password', { replace: true });
+        localStorage.setItem('forgotPasswordVisited', 'true');
+        navigate('/reset-password');
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        setError(err.message || 'Ошибка при восстановлении пароля');
+      });
   };
 
   return (

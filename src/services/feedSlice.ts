@@ -1,0 +1,67 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getFeedsApi } from '../utils/burger-api';
+import { TOrder } from '@utils-types';
+
+interface FeedState {
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialState: FeedState = {
+  orders: [],
+  total: 0,
+  totalToday: 0,
+  isLoading: false,
+  error: null
+};
+
+export const fetchFeed = createAsyncThunk(
+  'feed/fetchFeed',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getFeedsApi();
+      return res;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Ошибка при получении ленты';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+const feedSlice = createSlice({
+  name: 'feed',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFeed.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchFeed.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
+      })
+      .addCase(fetchFeed.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error =
+          (action.payload as string) ||
+          action.error.message ||
+          'Ошибка загрузки ленты заказов';
+      });
+  }
+});
+
+export const getFeedOrders = (state: { feed: FeedState }) => state.feed.orders;
+export const getFeedTotal = (state: { feed: FeedState }) => state.feed.total;
+export const getFeedTotalToday = (state: { feed: FeedState }) =>
+  state.feed.totalToday;
+export const getFeedsState = (state: { feed: FeedState }) => state.feed;
+
+export default feedSlice.reducer;

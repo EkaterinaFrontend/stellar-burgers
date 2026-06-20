@@ -1,5 +1,5 @@
-import constructorReducer, { 
-  addIngredient, 
+import constructorReducer, {
+  addIngredient,
   removeIngredient,
   clearConstructor
 } from '../constructorSlice';
@@ -21,10 +21,10 @@ describe('Редьюсер constructorSlice', () => {
   });
 
   test('должен обрабатывать экшен addIngredient для булки', () => {
-    const mockBun = { 
-      _id: '1', 
-      name: 'Краторная булка', 
-      type: 'bun', 
+    const mockBun = {
+      _id: '1',
+      name: 'Краторная булка',
+      type: 'bun',
       price: 100,
       proteins: 80,
       fat: 24,
@@ -41,11 +41,11 @@ describe('Редьюсер constructorSlice', () => {
   });
 
   test('должен обрабатывать экшен addIngredient для начинки', () => {
-    const mockIngredient = { 
-      _id: '2', 
-      name: 'Бифштекс', 
-      type: 'main', 
-      price: 200, 
+    const mockIngredient = {
+      _id: '2',
+      name: 'Бифштекс',
+      type: 'main',
+      price: 200,
       id: 'unique-id',
       proteins: 44,
       fat: 26,
@@ -64,22 +64,24 @@ describe('Редьюсер constructorSlice', () => {
   test('должен обрабатывать экшен removeIngredient', () => {
     const stateWithIngredient = {
       bun: null,
-      ingredients: [{ 
-        _id: '2', 
-        name: 'Бифштекс', 
-        type: 'main', 
-        price: 200, 
-        id: 'unique-id',
-        proteins: 44,
-        fat: 26,
-        carbohydrates: 85,
-        calories: 643,
-        image: 'https://yandex.net',
-        image_mobile: 'https://yandex.net',
-        image_large: 'https://yandex.net'
-      }]
+      ingredients: [
+        {
+          _id: '2',
+          name: 'Бифштекс',
+          type: 'main',
+          price: 200,
+          id: 'unique-id',
+          proteins: 44,
+          fat: 26,
+          carbohydrates: 85,
+          calories: 643,
+          image: 'https://yandex.net',
+          image_mobile: 'https://yandex.net',
+          image_large: 'https://yandex.net'
+        }
+      ]
     };
-    const action = removeIngredient('unique-id'); 
+    const action = removeIngredient('unique-id');
     const state = constructorReducer(stateWithIngredient as any, action);
 
     expect(state.ingredients).toHaveLength(0);

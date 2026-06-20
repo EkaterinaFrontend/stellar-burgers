@@ -109,7 +109,6 @@ const App = () => {
         <Route path='/feed' element={<Feed />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
 
-        {/* ИСПРАВЛЕНО: Добавлен контейнер центрирования и заголовок страницы по макету */}
         <Route
           path='/ingredients/:id'
           element={

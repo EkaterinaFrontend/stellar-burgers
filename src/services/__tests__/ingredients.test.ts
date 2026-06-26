@@ -1,6 +1,5 @@
 import { UnknownAction } from '@reduxjs/toolkit';
 
-// Используем require, чтобы TypeScript не ругался на пути, а Jest успешно нашел файл
 const ingredientsSlice = require('../ingredientsSlice');
 const ingredientsReducer = ingredientsSlice.default || ingredientsSlice;
 const fetchIngredients = ingredientsSlice.fetchIngredients;
